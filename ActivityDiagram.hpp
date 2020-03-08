@@ -44,9 +44,38 @@ private:
     void figureMode();
     void signalMode();
 
-    
+    //  Visual
+    void resetTerminal();
+    void draw(bool marginAdjust = true);
 
-}
+    //  Binding 
+    void bindSig();
+    void bindNode();
+
+    void bindNew();
+    void bindOpen();
+    void bindSave();
+    void bindSaveAs();
+    void bindRename();
+
+    void bindMoveD();
+    void bindMoveU();
+    void bindUp();
+    void bindDown();
+    void bindLeft();
+    void bindRight();
+
+
+
+public:
+
+    ActivityDiagram();
+    void initAll();
+    void refresh();
+    void setEntry(string what, string value);
+    string getEntry(string what);
+
+};
 
 
 
