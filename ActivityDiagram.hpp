@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <map>
 #include "Controller.hpp"
+#include "Document.hpp"
 
 using namespace std;
 
