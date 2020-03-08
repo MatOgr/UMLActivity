@@ -46,7 +46,7 @@ private:
     void figureMode();
     void signalMode();
 
-    //  Visual
+    //  Visualizing
     void resetTerminal();
     void draw(bool marginAdjust = true);
 
@@ -72,6 +72,9 @@ private:
     //  Key handler
     void keyHandler();
     void keyHandler(int key);
+
+    //  General
+    void bindingSetup();
 
 public:
 
