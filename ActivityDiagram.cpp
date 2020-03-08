@@ -6,3 +6,9 @@
 
 #include "ActivityDiagram.hpp"
 
+
+// Mode manip
+void ActivityDiagram::nodeMode() {
+    
+}
+

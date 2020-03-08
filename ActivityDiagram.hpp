@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <map>
 #include "Controller.hpp"
-#include "Document.hpp"
+#include "Doc.hpp"
 
 using namespace std;
 
@@ -24,10 +24,10 @@ private:
     map<string, string> entries;
 
     //  Document (and its state), data control, create signal
-    Document doc;
-    DocumentState state;
-    DataControl* control;
-    SignalCreate* create;
+    Doc doc;
+    DocState state;
+    //DataControl* control;
+    //SignalCreate* create;
 
     //  Terminal sizing
     void trimUp();
@@ -36,8 +36,8 @@ private:
     void trimRight();
 
     //  Nodes 
-    void nextNode();
-    void prevNode();
+    void nextFigure();
+    void prevFigure();
 
     //  Signals
     void nextSig();
@@ -53,7 +53,7 @@ private:
 
     //  Binding objects
     void bindSig();
-    void bindNode();
+    void bindFigure();
 
     //  file binding
     void bindNew();
