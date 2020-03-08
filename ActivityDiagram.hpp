@@ -28,13 +28,15 @@ private:
     DataControl* control;
     SignalCreate* create;
 
-    //  Sizing
+    //  Terminal sizing
     void trimUp();
     void trimDown();
     void trimLeft();
     void trimRight();
 
-    //  Nodes and labels
+    //  Nodes 
+    void nextNode();
+    void prevNode();
 
     //  Signals
     void nextSig();
@@ -48,16 +50,18 @@ private:
     void resetTerminal();
     void draw(bool marginAdjust = true);
 
-    //  Binding 
+    //  Binding objects
     void bindSig();
     void bindNode();
 
+    //  file binding
     void bindNew();
     void bindOpen();
     void bindSave();
     void bindSaveAs();
     void bindRename();
 
+    //  Nav binding
     void bindMoveD();
     void bindMoveU();
     void bindUp();
@@ -65,7 +69,9 @@ private:
     void bindLeft();
     void bindRight();
 
-
+    //  Key handler
+    void keyHandler();
+    void keyHandler(int key);
 
 public:
 
