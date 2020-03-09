@@ -9,6 +9,7 @@
 
 // Mode manip
 void ActivityDiagram::nodeMode() {
-    
+    state.mode = Mode::Node;
+    draw();
 }
 
