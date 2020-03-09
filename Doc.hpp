@@ -80,5 +80,5 @@ struct DocState {
 };
 
 
-
+//N
 #endif // !Doc_hpp

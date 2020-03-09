@@ -34,11 +34,29 @@ public:
     void changeSignal(int pos);
 
     void newDoc();
-    void openDoc();
-    void saveDoc();
-}
+    void openDoc(string fName);
+    void saveDoc(string fName);
+};
 
 
 
+class SigCreator {
+private:
+    Controller* c;
+    Doc* d;
+    DocState* s;
+    int sigPos;         //  of new signal
+    int sigSrc;         //  of new signal
+    
+
+public:
+    SigCreator(Controller* cont, Doc* doc, DocState* state);
+    void begin(int pos);        //  creating new signal
+    void end();                 //  finish creating
+    void next();                //  save src, continue
+    void cancel();              //  resign of creating new signal
+};
+
+//N
 
 #endif // !Controller_hpp

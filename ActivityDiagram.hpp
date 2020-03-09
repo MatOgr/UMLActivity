@@ -4,8 +4,8 @@
     Mateusz Ogrodowczyk
 */
 
-#ifndef Controller_hpp
-#define Controller_hpp
+#ifndef ActivityDiagram_hpp
+#define ActivityDiagram_hpp
 
 #include <iostream>
 #include <fstream>
@@ -26,8 +26,8 @@ private:
     //  Document (and its state), data control, create signal
     Doc doc;
     DocState state;
-    //DataControl* control;
-    //SignalCreate* create;
+    Controller* control;
+    SigCreator* create;
 
     //  Terminal sizing
     void trimUp();
@@ -89,5 +89,5 @@ public:
 
 
 
-
-#endif // !Controller_hpp
+//N
+#endif // !ActivityDiagram_hpp
