@@ -21,16 +21,16 @@ private:
 public:
     Controller(Doc* doc, DocState state);
 
-    void addNode(int pos, NodeType type, string name);
-    void removeNode(int pos);
-    void renameNode(string name);
-    void moveNode(int pos, int dest);
-    void changeNode(int pos);
+    void addNode(int pos, NodeType type, string name);  // Added
+    void removeNode(int pos);       // Added
+    void renameNode(string name);   // Added
+    bool moveNode(int start, int dest);     // Added
+    bool changeNode(int pos);   
 
     void addSignal(int pos);
     void removeSignal(int pos);
     void renameSignal(string name);
-    void moveSignal(int pos, int dest);
+    bool moveSignal(int pos, int dest);
     void changeSignal(int pos);
 
     void newDoc();

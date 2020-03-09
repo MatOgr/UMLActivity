@@ -29,7 +29,7 @@ enum NodeType {
     Fork,
     Join,
     Merge,
-    //Time,
+    Time,
     Final
 };
 
