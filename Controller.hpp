@@ -25,13 +25,13 @@ public:
     void removeNode(int pos);       // Added
     void renameNode(string name);   // Added
     bool moveNode(int start, int dest);     // Added
-    bool changeNode(int pos);   
+    void changeNode(int pos);       // Added
 
-    void addSignal(int pos);
-    void removeSignal(int pos);
-    void renameSignal(string name);
-    bool moveSignal(int pos, int dest);
-    void changeSignal(int pos);
+    void addSignal(int pos, int src, int dest, SigType type, string name);  // Added
+    void removeSignal(int pos);         // Added
+    void renameSignal(string name);         // Added
+    bool moveSignal(int start, int dest);           // Added
+    void changeSignal(int pos);         // Added
 
     void newDoc();
     void openDoc(string fName);
