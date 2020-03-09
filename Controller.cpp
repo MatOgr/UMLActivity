@@ -7,16 +7,12 @@
 #include "Controller.hpp"
 
 
-
-
 Controller::Controller(Doc* doc, DocState* state) {
     d = doc;
     s = state;
 }
 
-
 void Controller::addNode(int pos, NodeType type, string name) {
-
     for(auto& s : d->signals) {
         if (s.source >= pos) ++s.source;
         if (s.destination >= pos) ++s.destination;
@@ -119,6 +115,7 @@ void Controller::changeNode(int pos) {
 }
 
 
+
 void Controller::addSignal(int pos, int src, int dest, SigType type, string name) {
     d->signals.emplace(d->signals.begin() + pos, Signal {type, name, src, dest});
     s->hasChanged = true;
@@ -152,6 +149,45 @@ void Controller::changeSignal(int pos) {
     Signal& i = d->signals[pos];
     i.type = (i.type == SigType::Change) ? SigType::Info : SigType::Change;
     s->hasChanged = true;
+}
+
+
+
+void Controller::newDoc() {
+    *d = Doc();
+    s->docName = "newOne.json";
+    s->lengthMarg = 0;
+    s->widthMarg = 0;
+    s->selectedNode = 0;
+    s->selectedSig = 0;
+    s->mode = Mode::Node;
+    s->hasChanged = true;
+
+}
+
+void Controller::openDoc(string fName) {
+    ifstream fp(fName);
+    if(fp.fail())   throw FError::OpenErr;
+    json j;
+    fp >> j;
+    *d = j.get<Doc>();
+    fp.close();
+    s->docName = fName;
+    s->lengthMarg = 0;
+    s->widthMarg = 0;
+    s->selectedNode = 0;
+    s->selectedSig = 0;
+    s->mode = Mode::Node;
+    s->hasChanged = false;
+}
+
+void Controller::saveDoc(string fName) {
+    ofstream fp(fName);
+    if(fp.fail())   throw FError::CloseErr;
+    fp << json(*d).dump(4) << endl;
+    fp.close();
+    s->docName = fName;
+    s->hasChanged = false;
 }
 
 //N

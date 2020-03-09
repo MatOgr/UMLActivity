@@ -17,8 +17,8 @@ using namespace std;
 
 //  Node structure
 struct Node {
-    NodeType type;
     string name;
+    NodeType type;
 };
 
 enum NodeType {
@@ -35,7 +35,7 @@ enum NodeType {
 
 void toJson(json& j, const Node& n);
 void fromJson(const json& j, Node& n);
-
+bool operator <(const Node& x, const Node& y);
 
 //  Signal structure 
 struct Signal {
@@ -52,6 +52,7 @@ enum class SigType {
 
 void toJson(json& j, const Signal& s);
 void fromJson(json& j, const Signal& s);
+bool operator <(const Signal& x, const Signa& y);
 
 
 //  Document structure
@@ -79,6 +80,9 @@ struct DocState {
     bool hasChanged = false;
 };
 
+
+
+// maybe some example??? LATER
 
 //N
 #endif // !Doc_hpp

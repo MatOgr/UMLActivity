@@ -13,6 +13,13 @@
 
 using namespace std;
 
+
+enum class FError { 
+    OpenErr,
+    CloseErr
+};
+
+
 class Controller {
 private:
     Doc* d;
@@ -56,6 +63,8 @@ public:
     void next();                //  save src, continue
     void cancel();              //  resign of creating new signal
 };
+
+
 
 //N
 
