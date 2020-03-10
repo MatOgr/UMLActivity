@@ -21,7 +21,7 @@ struct Node {
     NodeType type;
 };
 
-enum NodeType {
+enum class NodeType {
     Initial, 
     Activity,
     Decision,
@@ -46,13 +46,13 @@ struct Signal {
 };
 
 enum class SigType {
-    Change,
+    Continue,
     Info
 };
 
 void toJson(json& j, const Signal& s);
 void fromJson(json& j, const Signal& s);
-bool operator <(const Signal& x, const Signa& y);
+bool operator <(const Signal& x, const Signal& y);
 
 
 //  Document structure
@@ -81,8 +81,19 @@ struct DocState {
 };
 
 
+const Doc EXAMPLE {
+    {
+        {NodeType::Initial, "Start"},
+        {NodeType::Activity, "Take a breath"},
+        {NodeType::Final, "Dead"}
+    },
+    {
+        {SigType::Continue, 0, 1},
+        {SigType::Continue, 1, 2}
+    }
+};
 
-// maybe some example??? LATER
+
 
 //N
 #endif // !Doc_hpp
