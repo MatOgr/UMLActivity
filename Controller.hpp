@@ -54,6 +54,8 @@ private:
     DocState* s;
     int sigPos;         //  of new signal
     int sigSrc;         //  of new signal
+    int crSlctdNode = 0;
+    int crSlctdSig = 0;
     
 
 public:

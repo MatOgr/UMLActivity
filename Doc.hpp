@@ -73,8 +73,8 @@ void fromJson(json& j, Doc& d);
 struct DocState {
     string docName;
     Mode mode;
-    int selectedNode;
-    int selectedSig;
+    int selectedNode = 0;
+    int selectedSig = 0;
     int widthMarg = 0;
     int lengthMarg = 0;
     bool hasChanged = false;

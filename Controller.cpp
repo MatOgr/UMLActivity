@@ -5,7 +5,8 @@
 */
 
 #include "Controller.hpp"
-
+#include <fstream>
+#include "Doc.hpp"
 
 Controller::Controller(Doc* doc, DocState* state) {
     d = doc;
@@ -162,12 +163,11 @@ void Controller::newDoc() {
     s->selectedSig = 0;
     s->mode = Mode::Node;
     s->hasChanged = true;
-
 }
 
 void Controller::openDoc(string fName) {
     ifstream fp(fName);
-    if(fp.fail())   throw FError::OpenErr;
+    if(fp.fail())   throw cout << "Error opening\n";
     json j;
     fp >> j;
     *d = j.get<Doc>();
@@ -183,11 +183,50 @@ void Controller::openDoc(string fName) {
 
 void Controller::saveDoc(string fName) {
     ofstream fp(fName);
-    if(fp.fail())   throw FError::CloseErr;
+    if(fp.fail())   throw cout << "Error saving\n\n";
     fp << json(*d).dump(4) << endl;
     fp.close();
     s->docName = fName;
     s->hasChanged = false;
+}
+
+
+
+
+void SigCreator::SigCreator(Controller* cont, Doc* doc, DocState* state) {
+    c = cont;
+    d = doc;
+    s = state;
+}
+
+void SigCreator::begin(int pos) {
+    if(s->mode != Mode::Signal || d->nodes.empty()) 
+        return;
+    sigPos = pos;
+    s->mode = Mode::NewSigSrc;
+    crSlctdNode = s->selectedNode;
+    crSlctdSig = s->selectedSig
+    s->crSlctdNode = (d->signals.size() > 0) ? min(d->signals[s->selectedSig].source, d->signals[s->selectedSignal].destination) : 0;
+}
+
+void SigCreator::end() {
+    c->addSignal(sigPos, sigSrc, s->selectedNode, SigType::Info, "New Signal");
+    s->selectedNode = crSlctdNode;
+    s->selectedSig = crSlctdSig;
+    s->mode = Mode::Signal;
+}
+
+void SigCreator::next() {
+    s->mode = Mode::NewSigDest;
+    siSrc = s->selectedNode;
+}
+
+void SigCreator::cancel() {
+    if(s->mode == Mode::NewSigSrc || s->mode == Mode::NewSigDest) {
+        s->mode = Mode::Signal;
+        s->selectedNode = crSlctdNode;
+        s->selectedSig = crSlctdSig;
+    }
 }
 
 //N
