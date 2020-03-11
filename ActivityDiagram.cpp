@@ -13,5 +13,16 @@ void ActivityDiagram::nodeMode() {
     draw();
 }
 
+void ActivityDiagram::signalMode() {
+    state.mode = Mode::Signal;
+    draw();
+}
+
+
+//  Window sizes
+void ActivityDiagram::trimDown() {
+    if(state.lengthMarg < (doc.nodes.size() * )
+}
+
 
 //N

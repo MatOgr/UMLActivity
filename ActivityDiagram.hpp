@@ -18,7 +18,7 @@ using namespace std;
 
 class ActivityDiagram : public Tool {
 
-private:
+public:
     
     //  Storage
     map<string, string> entries;
@@ -77,7 +77,7 @@ private:
     //  General
     void bindingSetup();
 
-public:
+//public:
 
     ActivityDiagram();
     void initAll();
