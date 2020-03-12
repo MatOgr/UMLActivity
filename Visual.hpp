@@ -12,6 +12,7 @@ const int NDLNGTH = 20;
 const int SIGLNGTH = 3;
 
 class Vision {
+protected:
     WINDOW* w;
     DocState* state;
 
@@ -23,6 +24,7 @@ class Border : public Vision {
 public:
     Border(DocState* stat);
     ~Border();
+
     void draw();
 };
 
@@ -32,12 +34,26 @@ private:
     string info;
 
     void drawInfo();
+
 public:
     InfoBar(Doc* d, DocState* s);
     ~InfoBar();
+
     void setInfo(string i);
     void clearInfo();
     void draw();
 };
 
+
+class Blocks: public Vision {
+private:
+    Doc* doc;
+
+public:
+    Blocks(Doc* d, DocState* s);
+    ~Blocks();
+
+    void draw();
+    //  positioning???
+}
 // what about nodes, signals?

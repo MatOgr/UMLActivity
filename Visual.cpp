@@ -24,7 +24,7 @@ void makeSpace(WINDOW* w, int X, int Y, int length) {
 
 Border::Border(DocState* s) {
     state = s;
-    w = newwin(getmaxx(stdscr) - 5, getmaxy(stdscr), 1, 0); //  ???
+    w = newwin(getmaxy(stdscr) - 5, getmaxx(stdscr), 1, 0); //  ???
 }
 
 Border::~Border() {
@@ -37,7 +37,7 @@ void Border::draw() {
     mvwhline(w, 5, 1, '=', getmaxx(w) - 1); //  ???
     string windowName = state->docName;
     if(state->hasChanged) windowName += "*";
-    visContent(w, windowName.c_str(), 0, 0, getmaxx(stdscr) - 1);   //  ???          //  ???
+    visContent(w, windowName.c_str(), getmaxx(stdscr) - 1, 0, 0);   //  ???          //  ???
     wrefresh(w);
 }
 
@@ -46,7 +46,7 @@ void Border::draw() {
 InfoBar::InfoBar(Doc* d, DocState* s) {
     doc = d;
     state = s;
-    w = newwin(1, getmaxx(stdscr) - 1, 0);
+    w = newwin(1, getmaxx(stdscr), getmaxy(stdscr) - 2, 0);
     wstandout(w);
 }
 
@@ -103,4 +103,22 @@ void InfoBar::draw() {
         break;
     }
     wrefresh(w);
+}
+
+
+//////////////////////////         Nodes / Blocks
+
+Blocks::Blocks(Doc* d, DocState* s) {
+    doc = d;
+    state = s;
+    w = newpad(6, doc->nodes.size() * NDLNGTH);
+    draw();
+}
+
+Blocks::~Blocks() {
+    delwin(w);
+}
+
+void Blocks::draw() {
+    
 }
