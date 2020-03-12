@@ -55,5 +55,5 @@ public:
 
     void draw();
     //  positioning???
-}
+};
 // what about nodes, signals?
