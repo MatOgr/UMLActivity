@@ -129,18 +129,29 @@ void Blocks::draw() {
         makeSpace(w, 3, NDLNGTH * i, NDLNGTH);
         makeSpace(w, 4, NDLNGTH * i, NDLNGTH);
 
-        if(doc->node[i].type == NodeType::Initial) {
-            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
-            visContent(w, " /     \\", NDLNGTH * i, NDLNGTH);
-            visContent(w, "|       |", NDLNGTH * i, NDLNGTH);
-            visContent(w, " \\    /", NDLNGTH * i, NDLNGTH);
-            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
-        } else if(doc->node[i].type == NodeType::Final) {
-            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
-            visContent(w, " /@@@@@\\", NDLNGTH * i, NDLNGTH);
-            visContent(w, "|@@@@@@@|", NDLNGTH * i, NDLNGTH);
-            visContent(w, " \\@@@@@/", NDLNGTH * i, NDLNGTH);
-            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
+        if(doc->nodes[i].type == NodeType::Initial) {
+            visContent(w, "  -----", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, " /     \\", 1, NDLNGTH * i, NDLNGTH);
+            visContent(w, "|       |", 2, NDLNGTH * i, NDLNGTH);
+            visContent(w, " \\    /", 3, NDLNGTH * i, NDLNGTH);
+            visContent(w, "  -----", 4, NDLNGTH * i, NDLNGTH);
+        } else if(doc->nodes[i].type == NodeType::Final) {
+            visContent(w, "  -----", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, " /@@@@@\\", 1, NDLNGTH * i, NDLNGTH);
+            visContent(w, "|@@@@@@@|", 2, NDLNGTH * i, NDLNGTH);
+            visContent(w, " \\@@@@@/", 3, NDLNGTH * i, NDLNGTH);
+            visContent(w, "  -----", 4, NDLNGTH * i, NDLNGTH);
+        } else if (doc->nodes[i].type == NodeType::Decision) {
+            visContent(w, " /\\", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, "/  \\", 1, NDLNGTH * i, NDLNGTH);
+            visContent(w, "\\  /", 2, NDLNGTH * i, NDLNGTH);
+            visContent(w, " \\/", 3, NDLNGTH * i, NDLNGTH);
+            visContent(w, "  ", 4, NDLNGTH * i, NDLNGTH);
         }
+
+        visContent(w, doc->nodes[i].name.c_str(), 4, NDLNGTH * i, NDLNGTH);
+        if(i == state->selectedNode && (state->mode == Mode::Node || state->mode == Mode::NewSigSrc || state->mode == Mode::NewSigDest))
+            wattron(w, A_STANDOUT);
+        prefresh(w, 0, state->widthMarg, 2, 1, 6, getmaxx(stdscr) - 2);
     }
 }
