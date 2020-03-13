@@ -155,3 +155,87 @@ void Blocks::draw() {
         prefresh(w, 0, state->widthMarg, 2, 1, 6, getmaxx(stdscr) - 2);
     }
 }
+
+
+/////////////////////////           Signals
+
+void SignalVision::refreshLines() {
+    for(int i = 0; i < doc->nodes.size(); i++) 
+        mvwvline(w, 0, NDLNGTH * i + NDLNGTH / 2, '|', SIGLNGTH * doc->signals.size());
+}
+
+SignalVision::SignalVision(Doc* d, DocState* s) {
+    doc = d;
+    state = s;
+    w = newpad(doc->signals.size() * SIGLNGTH, doc->nodes.size() * NDLNGTH);
+    draw();
+}
+
+void SignalVision::draw() {
+    wclear();
+    refreshLines();
+    int source, dest;
+    Signal* s;
+
+    for(int i = 0; i < doc->signals.size(); i++) {
+        s = &doc->signals[i];
+        if(state->mode == Mode::Signal && state->selectedSig == i)
+            wattron(w, A_STANDOUT);
+        //  to the left
+        if(s->destination < s->source) {
+            dest = (s->source - s->destination) * NDLNGTH - 1;
+            source = (s->destination * NDLNGTH) + NDLNGTH / 2 + 1;
+            makeSpace(w, SIGLNGTH * i + 1, source, dest);
+            visContent(w, s->name.c_str(), SIGLNGTH * i + 1, source, dest);    
+            switch (s->type)
+            {
+            case SigType::Continue:
+                mvwhline(w, SIGLNGTH, * i + 2, source, '=', dest);
+                break;            
+            default:
+                mvwhline(w, SIGLNGTH * i + 2, source, '-', dest);
+                break;
+            }
+            mvwaddch(w, SIGLNGTH * i + 2, source, '<');
+        }
+        //  to the right
+        else if(s->destination > s->source) {
+            dest = (s->destination - s->source) * NDLNGTH - 1;
+            source = (s->source * NDLNGTH) + NDLNGTH / 2 + 1;
+            makeSpace(w, SIGLNGTH * i + 1, source, dest);
+            visContent(w, s->name.c_str(), SIGLNGTH * i + 1, source, dest);
+
+            switch(s->type) {
+                case SigType::Continue:
+                    mvwhline(w, SIGLNGTH * i + 2, source, '=',dest);
+                    break;
+                default:
+                    mvwhline(w, SIGLNGTH * i + 2, source, '-', dest);
+                    break;
+            }
+            mvwaddch(w, SIGLNGTH * i + 2, source + dest - 1, '>');
+        }
+        // to selffffffffyfyf
+        else {
+            dest = NDLNGTH / 2;
+            source = (s->source * NDLNGTH);
+            makeSpace(w, SIGLNGTH * i, source, NDLNGTH);
+            makeSpace(w, SIGLNGTH * i + 1, source, NDLNGTH);
+            makeSpace(w, SIGLNGTH * i + 2, source, NDLNGTH);
+            visContent(w, s->name.c_str(), SIGLNGTH * i, source, NDLNGTH);
+
+            char = (s->type == SigType::Continue) ? '=' : '-';
+            mvwhline(w, SIGLNGTH * i + 1, source + dest + 1, ch, dest - 2);
+            mvwhline(w, SIGLNGTH * i + 2, source + dest + 1, ch, dest - 2);
+            mvwaddch(w, SIGLNGTH * i + 1, source + dest, '|');
+            mvwaddch(w, SIGLNGTH * i + 2, source + dest, '|');
+            mvwaddch(w, SIGLNGTH * i + 2, source + dest + 1, '<');
+            mvwaddch(w, SIGLNGTH * i + 1, source + dest * 2 - 1, '*');
+            mvwaddch(w, SIGLNGTH * i + 2, source + dest * 2 - 1, '*')
+
+        }
+        if(state->mode == Mode::Signal && i == state->selectedSig) 
+            wattroff(w, A_STANDOUT);
+    }
+    prefresh(w, state->lengthMarg, state->widthMarg, 8, 1, getmaxy(stdscr) - 4, getmaxx(stdscr) - 2);
+}
