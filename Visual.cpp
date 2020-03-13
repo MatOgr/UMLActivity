@@ -120,5 +120,27 @@ Blocks::~Blocks() {
 }
 
 void Blocks::draw() {
-    
+    for*int i = 0; i < doc->nodes.size(); i++) {
+        if(i == state->selectedNode && (state->mode == Mode::Node || state->mode == Mode::NewSigSrc || state->mode == Mode::NewSigDest))
+            wattron(w, A_STANDOUT);
+        makeSpace(w, 0, NDLNGTH * i, NDLNGTH);
+        makeSpace(w, 1, NDLNGTH * i, NDLNGTH);
+        makeSpace(w, 2, NDLNGTH * i, NDLNGTH);
+        makeSpace(w, 3, NDLNGTH * i, NDLNGTH);
+        makeSpace(w, 4, NDLNGTH * i, NDLNGTH);
+
+        if(doc->node[i].type == NodeType::Initial) {
+            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
+            visContent(w, " /     \\", NDLNGTH * i, NDLNGTH);
+            visContent(w, "|       |", NDLNGTH * i, NDLNGTH);
+            visContent(w, " \\    /", NDLNGTH * i, NDLNGTH);
+            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
+        } else if(doc->node[i].type == NodeType::Final) {
+            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
+            visContent(w, " /@@@@@\\", NDLNGTH * i, NDLNGTH);
+            visContent(w, "|@@@@@@@|", NDLNGTH * i, NDLNGTH);
+            visContent(w, " \\@@@@@/", NDLNGTH * i, NDLNGTH);
+            visContent(w, "  -----", NDLNGTH * i, NDLNGTH);
+        }
+    }
 }

@@ -4,6 +4,9 @@
     MatOgr
 */
 
+#ifndef Visual_hpp
+#define Visual_hpp
+
 #include <ncurses.h>
 #include "Doc.hpp"
 #include <stdio.h>
@@ -32,7 +35,7 @@ class InfoBar : public Vision {
 private:
     Doc* doc;
     string info;
-
+    
     void drawInfo();
 
 public:
@@ -56,4 +59,20 @@ public:
     void draw();
     //  positioning???
 };
-// what about nodes, signals?
+
+
+class SignalVision: public Vision {
+private:
+    Doc* doc;
+
+    void refreshLines();
+public:
+    SignalVision(Doc* d, DocState* s);
+    ~SignalVision();
+
+    void draw();
+    //  positioning???
+}
+
+
+#endif // !Visual_hpp
