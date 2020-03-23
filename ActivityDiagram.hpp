@@ -13,6 +13,8 @@
 #include <map>
 #include "Controller.hpp"
 #include "Doc.hpp"
+#include "Visual.hpp"
+
 
 using namespace std;
 
@@ -29,50 +31,60 @@ public:
     Controller* control;
     SigCreator* create;
 
+    //  Point of view
+    Blocks* nodeView;
+    SignalVision* sigView;
+    InfoBar* infoView;
+    Border* borderView;
+
     //  Terminal sizing
-    void trimUp();
-    void trimDown();
-    void trimLeft();
-    void trimRight();
+    void trimUp();          //  DONE
+    void trimDown();          //  DONE
+    void trimLeft();          //  DONE
+    void trimRight();          //  DONE
 
     //  Nodes 
-    void nextFigure();
-    void prevFigure();
+    void nextFigure();          //  DONE
+    void prevFigure();          //  DONE
 
     //  Signals
-    void nextSig();
-    void prevSig();
+    void nextSig();          //  DONE
+    void prevSig();          //  DONE
 
     //  Changing modes
-    void figureMode();
-    void signalMode();
+    void figureMode();          //  DONE
+    void signalMode();          //  DONE
 
     //  Visualizing
-    void resetTerminal();
-    void draw(bool marginAdjust = true);
+    void resetTerminal();          //  DONE
+    void draw(bool marginAdjust = true);          //  DONE
 
     //  Binding objects
-    void bindSig();
-    void bindFigure();
+    void bindSig();          //  DONE
+    void bindFigure();          //  DONE
+    void bindDelete();          //  DONE
+    void bindChangeType();          //  DONE
+    void bindNewU();          //  DONE
+    void bindNewD();          //  DONE
 
     //  file binding
-    void bindNew();
-    void bindOpen();
-    void bindSave();
-    void bindSaveAs();
-    void bindRename();
-
+    void bindNew();          //  DONE
+    void bindOpen();          //  DONE
+    void bindSave();          //  DONE
+    void bindSaveAs();          //  DONE
+    void bindRename();          //  DONE
+    
     //  Nav binding
-    void bindMoveD();
-    void bindMoveU();
-    void bindUp();
-    void bindDown();
-    void bindLeft();
-    void bindRight();
+    void bindMoveD();          //  DONE
+    void bindMoveU();          //  DONE
+   // void bindUp();
+   // void bindDown();
+   // void bindLeft();
+   // void bindRight();
 
     //  Key handler
-    void keyHandler();
-    void keyHandler(int key);
+    void keyHandler();          //  DONE 
+    void keyHandler(int key);          //  DONE
 
     //  General
     void bindingSetup();
