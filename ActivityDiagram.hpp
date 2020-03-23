@@ -14,7 +14,7 @@
 #include "Controller.hpp"
 #include "Doc.hpp"
 #include "Visual.hpp"
-
+#include "obiektowe/shared.hpp"
 
 using namespace std;
 

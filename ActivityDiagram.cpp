@@ -299,6 +299,65 @@ void ActivityDiagram::bindNewD() {
     }
 }
 
+void ActivityDiagram::bindingSetup() {
+    // Key handler
+    backend->bind("<EDITION>", [this]() { keyHandler(); }, "---");
+
+    // Change type  -   CTRL + T
+    backend->bind("#nano#<CTRL>t%Toggle", [&]() { bindChangeType(); }, "Change Node/Signal type");
+    backend->("#nice#.Edit.Toggle type", [&]() { bindChangeType(); }, "Change Node/Signal type");
+
+    //  Rename  -   CTRL + R
+    backend->bind("#nano#<CTRL>r%Rename!New name${RENAME}", [this]() { bindRename(); }, "Rename Node/Signal");
+    backend->bind("#nice#.Edit.Rename${New name: |RENAME}", [this]() { bindRename(); }, "Rename Node/Signal");
+
+    //  Delete  -   CTRL X
+    backend->bind("#nano#<CTRL>x%Delete", [thiss]() { bindDelete(); }, "Delete Node/Signal");
+    backend->bind("#nice#.Edit.Delete", [this]() { bindDelete(); }, "Delete Node/Signal");
+
+    //  Signal Mode -   CTRL + L
+    backend->bind("#nano#<CTRL>l%Signals", [&]() { bindSig(); }, "Signals mode");
+    backend->bind("#nice#.Mode.Signals", [&]() { bindSig(); }, "Signals mode");
+
+    //  Node Mode   -   CTRL + K
+    backend->bind("#nano#<CTRL>k%Nodes", [&]() { bindFigure(); }, "Nodes mode");
+    backend->bind("#nice#.Mode.Nodes", [&]() { bindFigure(); }, "Nodes mode");
+
+    //  New up  -   CTRL + W
+    backend->bind("#nano#<CTRL>w%New before", [&]() { bindNewU(); }, "Create Node/Signal before this one");
+    backend->bind("#nice#.New.Before", [&]() { bindNewU(); }, "Create Node/Signal before this one");
+
+    //  New down    -   CTRL + E
+    backend->bind("#nano#<CTRL>w%New down here", [&]() { bindNewD(); }, "Create Node/Signal down here");
+    backend->bind("#nice#.New.Down.Here", [&]() { bindNewD(); }, "Create Node/Signal down here");
+
+    // Move down    -   CTRL + M
+    backend->bind("#nano#<CTRL>m%Move down", [&]() { bindMoveD(); }, "Move Node/Signal forward");
+    backend->bind("#nice#.Move.Down", [&]() { bindMoveD(); }, "Move Node/Signal forward");
+
+    // Move up  -   CTRL + B
+    backend->bind("#nano#<CTRL>b%Move up", [&]() { bindMoveU(); }, "Move Node/Signal backwards");
+    backend->bind("#nice#.Move.Up", [&]() { bindMoveU(); }, "Move Node/Signal backwards");
+
+    // Open file    -   CTRL + O
+    backend->bind("#nano#<CTRL>o%Open!Filename${FILENAME}", [&]() { bindOpen(); }, "Open the file");
+    backend->bind("#nice#.File.Open${Filename: |FILENAME}", [&]() { bindOpen(); }, "Open the file");
+
+    // New file -   CTRL + N
+    backend->bind("#nano#<CTRL>n%New", [&]() { bindNew(); }, "Create new file");
+    backend->bind("#nice#.File.New", [&]() { bindNew(); }, "Create new file");
+
+    // Save file    -   CTRL + S
+    backend->bind("#nano#<CTRL>s%Save", [&]() { bindSave(); }, "Save to existing file");
+    backend->bind("#nice#.File.Save", [&]() { bindSave(); }, "Save to existing file");
+
+    // Save file as -   CTRL + Z
+    backend->bind("#nano#<CTRL>z%Save as!Filename${FILENAME}", [&]() { bindSaveAs(); }, "Save to a new file");
+    backend->bind("#nice#.File.Save as${Filename: |FILENAME}", [&]() { bindSaveAs(); }, "Save to a new file");
+}
+
+
+/////////////////////////////       Key handle
 void ActivityDiagram::keyHandler() {
     string k = getEntry("KEY");
     infoView->clearInfo();
@@ -370,10 +429,9 @@ void ActivityDiagram::keyHandler() {
             draw();
         }
     }
-
-    
-
 }
+
+
 
 
 
