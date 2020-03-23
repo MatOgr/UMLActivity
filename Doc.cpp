@@ -6,6 +6,9 @@
 
 #include "Doc.hpp"
 
+
+////////////////////////////        NODES
+
 void toJson(json& j, const Node& n) {
     j = json { {"name", n.name}, {"type", n.type}};
 } 
@@ -16,6 +19,7 @@ void fromJson(const json& j, Node& n) {
 }
 
 
+////////////////////////////        SIGNALS         
 
 void toJson(json& j, const Signal& s) {
     j = json {
@@ -34,6 +38,7 @@ void fromJson(const json& j, Signal& s) {
 }
 
 
+////////////////////////////        DOCUMENTS
 
 void toJson(json& j, const Doc& d) {
     j = json {

@@ -57,7 +57,7 @@ public:
     ~Blocks();
 
     void draw();
-    //  positioning???
+    void margAdjustBlock(int id);
 };
 
 
@@ -66,13 +66,14 @@ private:
     Doc* doc;
 
     void refreshLines();
+    
 public:
     SignalVision(Doc* d, DocState* s);
     ~SignalVision();
 
     void draw();
-    //  positioning???
-}
+    void margAdjustSignal(int id);
+};
 
 
 #endif // !Visual_hpp

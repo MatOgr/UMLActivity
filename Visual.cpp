@@ -34,10 +34,10 @@ Border::~Border() {
 void Border::draw() {
     wclear(w);
     box(w, 0, 0);
-    mvwhline(w, 5, 1, '=', getmaxx(w) - 1); //  ???
+    mvwhline(w, 6, 1, '=', getmaxx(w) - 2); //  ???
     string windowName = state->docName;
     if(state->hasChanged) windowName += "*";
-    visContent(w, windowName.c_str(), getmaxx(stdscr) - 1, 0, 0);   //  ???          //  ???
+    visContent(w, windowName.c_str(), getmaxx(stdscr) - 2, 0, 0);   //  ???          //  ???
     wrefresh(w);
 }
 
@@ -149,11 +149,21 @@ void Blocks::draw() {
             visContent(w, "  ", 4, NDLNGTH * i, NDLNGTH);
         }
 
+        ////////////////////////    NEED ALSO SOME OTHER TYPES - LATERRRRRRRRRRRRRRERERERR
+
         visContent(w, doc->nodes[i].name.c_str(), 4, NDLNGTH * i, NDLNGTH);
         if(i == state->selectedNode && (state->mode == Mode::Node || state->mode == Mode::NewSigSrc || state->mode == Mode::NewSigDest))
-            wattron(w, A_STANDOUT);
-        prefresh(w, 0, state->widthMarg, 2, 1, 6, getmaxx(stdscr) - 2);
+            wattron(w, A_STANDOUT);    
     }
+    prefresh(w, 0, state->widthMarg, 2, 1, 6, getmaxx(stdscr) - 2);
+
+}
+
+void Blocks::margAdjustBlock(int id) {
+    if(NDLNGTH * (id + 1) - state->widthMarg > getmaxx(stdscr) - 2) 
+        state->widthMarg = NDLNGTH * (id + 1) - getmaxx(stdscr) - 2
+    else if(state->widthMarg >= NDLNGTH * id)
+        state->widthMarg = NDLNGTH * id;
 }
 
 
@@ -238,4 +248,11 @@ void SignalVision::draw() {
             wattroff(w, A_STANDOUT);
     }
     prefresh(w, state->lengthMarg, state->widthMarg, 8, 1, getmaxy(stdscr) - 4, getmaxx(stdscr) - 2);
+}
+
+void SignalVision::margAdjustSignal(int id) {
+    if(SIGLNGTH * (id + 1) - state->lengthMarg > getmaxy(stdscr) - 10) 
+        state->lengthMarg = SIGLNGTH * (id + 1) - getmaxy(stdscr) - 10
+    else if(state->lengthMarg >= SIGLNGTH * id)
+        state->lengthMarg = SIGLNGTH * id;
 }
