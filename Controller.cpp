@@ -79,38 +79,51 @@ void Controller::changeNode(int pos) {
              Time - t,
              Final - e\n\n";
     char o;
-    cin >> o;       //  error exception needed
-    switch(o) {
-    case 'i':
-        n.type = NodeType::Initial;
-        break;
-    case 'a':
-        n.type = NodeType::Activity;
-        break;
-    case 'd':
-        n.type = NodeType::Decision;
-        break;
-    case 'g':
-        n.type = NodeType::Guard;
-        break;
-    case 'f':
-        n.type = NodeType::Fork;
-        break;
-    case 'j':
-        n.type = NodeType::Join;
-        break;
-    case 'm':
-        n.type = NodeType::Merge;
-        break;
-    case 't':
-        n.type = NodeType::Time;
-        break;
-    case 'e':
-        n.type = NodeType::Final;
-        break;
-    default:
-        cout << "There's no such option - type remains as it was before\n";
-        break;
+    bool repeat = true;
+    while(repeat) {
+        cin >> o;       //  error exception needed
+        switch(o) {
+        case 'i':
+            n.type = NodeType::Initial;
+            repeat = false;
+            break;
+        case 'a':
+            n.type = NodeType::Activity;
+            repeat = false;
+            break;
+        case 'd':
+            n.type = NodeType::Decision;
+            repeat = false;
+            break;
+        case 'g':
+            n.type = NodeType::Guard;
+            repeat = false;
+            break;
+        case 'f':
+            n.type = NodeType::Fork;
+            repeat = false;
+            break;
+        case 'j':
+            n.type = NodeType::Join;
+            repeat = false;
+            break;
+        case 'm':
+            n.type = NodeType::Merge;
+            repeat = false;
+            break;
+        case 't':
+            n.type = NodeType::Time;
+            repeat = false;
+            break;
+        case 'e':
+            n.type = NodeType::Final;
+            repeat = false;
+            break;
+        default:
+            cout << "There's no such option - type remains as it was before\n";
+            repeat = true;
+            break;
+        }
     }
     s->hasChanged = false;
 }
