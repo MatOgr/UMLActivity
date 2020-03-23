@@ -92,8 +92,8 @@ public:
 //public:
 
     ActivityDiagram();
-    void initAll();
-    void refresh();
+    void init();          //  DONE
+    void redraw();          //  DONE
     void setEntry(string what, string value);
     string getEntry(string what);
 

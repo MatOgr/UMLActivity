@@ -432,9 +432,39 @@ void ActivityDiagram::keyHandler() {
 }
 
 
+/////////////////////////////       Public things
+void ActivityDiagram::ActivityDiagram() {
+    doc = EXAMPLE;
+    state = {Mode::Node, "example.json"};
+    control = new Controller(&doc, &state);
+    create = new SigCreator(&doc, &state, control);
 
+    borderView = new Border(&state);
+    nodeView = new Blocks(&doc, &state);
+    sigView = new SignalVision(&doc, &state);
+    infoView = new InfoBar(&doc, &state);
 
+    draw();
+}
 
+void ActivityDiagram::init() {
+    bindingSetup();
+    draw();
+}
 
+void ActivityDiagram::redraw() {
+    draw(false);
+}
+
+void ActivityDiagram::setEntry(string what, string value) {
+    entries[what] = value;
+}
+
+void ActivityDiagram::getEntry(string what) {
+    if(field == "IS_SAVED") 
+        return state.hasChanged ? "NO" : "YES";
+    else 
+        return entries[what];
+}
 
 //N
