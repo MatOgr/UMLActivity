@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 
     switch (argv[1][0]) {
         case 'o':
-            b = new Nano();
+            //b = new Nano;
             break;
         case 'e':
             b = new nice();

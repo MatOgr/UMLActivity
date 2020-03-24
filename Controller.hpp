@@ -54,8 +54,8 @@ private:
     DocState* s;
     unsigned int sigPos;         //  of new signal
     unsigned int sigSrc;         //  of new signal
-    unsigned int crSlctdNode = 0;
-    unsigned int crSlctdSig = 0;
+    unsigned int currentSlctdNode = 0;
+    unsigned int currentSlctdSig = 0;
     
 
 public:

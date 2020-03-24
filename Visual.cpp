@@ -200,7 +200,7 @@ void SignalVision::draw() {
             switch (s->type)
             {
             case SigType::Continue:
-                mvwhline(w, SIGLNGTH, * i + 2, source, '=', dest);
+                mvwhline(w, SIGLNGTH * i + 2, source, '=', dest);
                 break;            
             default:
                 mvwhline(w, SIGLNGTH * i + 2, source, '-', dest);

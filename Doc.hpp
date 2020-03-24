@@ -11,9 +11,8 @@
 #include <vector>
 #include <string>
 
-using nlohmann::json;
 using namespace std;
-
+using nlohmann::json;
 
 //  Node structure
 enum class NodeType {
@@ -33,8 +32,8 @@ struct Node {
     NodeType type;
 };
 
-void toJson(json& j, const Node& n);
-void fromJson(const json& j, Node& n);
+void to_json(json& j, const Node& n);
+void from_json(const json& j, Node& n);
 bool operator <(const Node& x, const Node& y);
 
 //  Signal structure 
@@ -46,12 +45,12 @@ enum class SigType {
 struct Signal {
     SigType type;
     string name;
-    int source;
-    int destination;
+    unsigned int source;
+    unsigned int destination;
 };
 
-void toJson(json& j, const Signal& s);
-void fromJson(json& j, const Signal& s);
+void to_json(json& j, const Signal& s);
+void from_json(json& j, const Signal& s);
 bool operator <(const Signal& x, const Signal& y);
 
 
@@ -67,14 +66,14 @@ struct Doc {
     vector<Node> nodes;
     vector<Signal> signals;
 };
-void toJson(json& j, const Doc& d);
-void fromJson(json& j, Doc& d);
+void to_json(json& j, const Doc& d);
+void from_json(json& j, Doc& d);
 
 struct DocState {
     string docName;
     Mode mode;
-    int selectedNode = 0;
-    int selectedSig = 0;
+    unsigned int selectedNode = 0;
+    unsigned int selectedSig = 0;
     int widthMarg = 0;
     int lengthMarg = 0;
     bool hasChanged = false;
@@ -84,7 +83,7 @@ struct DocState {
 const Doc EXAMPLE {
     {
         {NodeType::Initial, "Start"},                       // 0
-        {NodeType::Decision, ""},                           // 1
+        {NodeType::Decision, "Which one?"},                 // 1
         {NodeType::Activity, "Add 5 to the number"},        // 2
         {NodeType::Activity, "Multiply it by 5"},           // 3
         {NodeType::Activity, "Add 7 to the number"},        // 4
@@ -100,7 +99,7 @@ const Doc EXAMPLE {
         {SigType::Info, "NO", 1, 4},
         {SigType::Continue, "", 4, 5},
         {SigType::Continue, "", 5, 6},
-        {SigType::Continue, "", 6, 7}
+        {SigType::Continue, "", 6, 7},
     }
 };
 

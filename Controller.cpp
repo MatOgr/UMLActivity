@@ -20,7 +20,7 @@ void Controller::addNode(unsigned int pos, NodeType type, string name) {
         if (s.destination >= pos) s.destination++;
     }
     s->hasChanged = true;
-    d->nodes.emplace(d->nodes.begin() + pos, Node {type, name});
+    d->nodes.emplace(d->nodes.begin() + pos, Node {name, type});
 }
 
 void Controller::removeNode(unsigned int pos) {
@@ -210,7 +210,7 @@ void Controller::saveDoc(string fName) {
 
 
 
-void SigCreator::SigCreator(Controller* cont, Doc* doc, DocState* state) {
+SigCreator::SigCreator(Controller* cont, Doc* doc, DocState* state) {
     c = cont;
     d = doc;
     s = state;
@@ -221,15 +221,15 @@ void SigCreator::begin(unsigned int pos) {
         return;
     sigPos = pos;
     s->mode = Mode::NewSigSrc;
-    crSlctdNode = s->selectedNode;
-    crSlctdSig = s->selectedSig;
-    s->crSlctdNode = (d->signals.size() > 0) ? min(d->signals[s->selectedSig].source, d->signals[s->selectedSignal].destination) : 0;
+    currentSlctdNode = s->selectedNode;
+    currentSlctdSig = s->selectedSig;
+    s->selectedNode = (d->signals.size() > 0) ? min(d->signals[s->selectedSig].source, d->signals[s->selectedSig].destination) : 0;
 }
 
 void SigCreator::end() {
     c->addSignal(sigPos, sigSrc, s->selectedNode, SigType::Info, "New Signal");
-    s->selectedNode = crSlctdNode;
-    s->selectedSig = crSlctdSig;
+    s->selectedNode = currentSlctdNode;
+    s->selectedSig = currentSlctdSig;
     s->mode = Mode::Signal;
 }
 
@@ -241,8 +241,8 @@ void SigCreator::next() {
 void SigCreator::cancel() {
     if(s->mode == Mode::NewSigSrc || s->mode == Mode::NewSigDest) {
         s->mode = Mode::Signal;
-        s->selectedNode = crSlctdNode;
-        s->selectedSig = crSlctdSig;
+        s->selectedNode = currentSlctdNode;
+        s->selectedSig = currentSlctdSig;
     }
 }
 
