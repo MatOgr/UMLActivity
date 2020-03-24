@@ -48,14 +48,14 @@ void ActivityDiagram::trimLeft() {
 
 
 //////////////////////////////      Signals changing
-void ActivityDiagram::prevSig() {
+void ActivityDiagram::nextSig() {
     if(doc.signals.size() > 0) {
         state.selectedSig = (state.selectedSig + 1) % doc.signals.size();
         draw();
     }
 }
 
-void ActivityDiagram::nextSig() {
+void ActivityDiagram::prevSig() {
     if(doc.signals.size() == 0) 
         return;
     
@@ -69,14 +69,14 @@ void ActivityDiagram::nextSig() {
 
 
 //////////////////////////////      Nodes changing
-void ActivityDiagram::prevFigure() {
+void ActivityDiagram::nextFigure() {
     if(doc.nodes.size() > 0) {
         state.selectedNode = (state.selectedNode + 1) % doc.nodes.size();
         draw();
     }
 }
 
-void ActivityDiagram::nextFigure() {
+void ActivityDiagram::prevFigure() {
     if(doc.nodes.size() == 0) 
         return;
     
@@ -117,6 +117,10 @@ void ActivityDiagram::draw(bool adjusting) {
             break;
         }
     }
+    borderView->draw();
+    nodeView->draw();
+    sigView->draw();
+    infoView->draw();
 }
 
 
@@ -436,7 +440,7 @@ void ActivityDiagram::keyHandler() {
 /////////////////////////////       Public things
 ActivityDiagram::ActivityDiagram() {
     doc = EXAMPLE;
-    state = {"example.json", Mode::Node};
+    state = {Mode::Node, "example.json"};
     control = new Controller(&doc, &state);
     create = new SigCreator(control, &doc, &state);
 

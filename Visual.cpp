@@ -9,7 +9,7 @@
 
 void visContent(WINDOW* w, const char* txt, int length, int X, int Y) {
     int pad;
-    pad = (length - strlen(txt)) / 2;
+    pad = (length - (int)strlen(txt)) / 2;
     mvwaddnstr(w, Y, X + pad, txt, length);
 }
 
@@ -36,7 +36,8 @@ void Border::draw() {
     box(w, 0, 0);
     mvwhline(w, 6, 1, '=', getmaxx(w) - 2); //  ???
     string windowName = state->docName;
-    if(state->hasChanged) windowName += "*";
+    if(state->hasChanged) 
+        windowName += "*";
     visContent(w, windowName.c_str(), getmaxx(stdscr) - 2, 0, 0);   //  ???          //  ???
     wrefresh(w);
 }
@@ -72,7 +73,8 @@ void InfoBar::draw() {
         if(info != "") 
             mvwprintw(w, 0, 1, info.c_str());
         else if(!doc->nodes.empty()) 
-            mvwprintw(w, 0, wid - 16, "[MODE]: Node");
+            mvwprintw(w, 0, 1, doc->nodes[state->selectedNode].name.c_str());
+        mvwprintw(w, 0, wid - 16, "[MODE]: Node");
         break;
 
     case Mode::Signal:
@@ -96,7 +98,7 @@ void InfoBar::draw() {
 
     case Mode::NewSigSrc:
         mvwprintw(w, 0, 1, (info != "") ? info.c_str() : "Select SOURCE - press [y] ([q] - cancel)");
-        mvwprintw(w, 0, wid -16, "[MODE]:newSignal");
+        mvwprintw(w, 0, wid - 16, "[MODE]:newSignal");
         break;
 
     default:
@@ -111,7 +113,7 @@ void InfoBar::draw() {
 Blocks::Blocks(Doc* d, DocState* s) {
     doc = d;
     state = s;
-    w = newpad(6, doc->nodes.size() * NDLNGTH);
+    w = newpad(5, (int)doc->nodes.size() * NDLNGTH);
     draw();
 }
 
@@ -147,6 +149,12 @@ void Blocks::draw() {
             visContent(w, "\\  /", 2, NDLNGTH * i, NDLNGTH);
             visContent(w, " \\/", 3, NDLNGTH * i, NDLNGTH);
             visContent(w, "  ", 4, NDLNGTH * i, NDLNGTH);
+        } else if(doc->nodes[i].type == NodeType::Activity) {
+            visContent(w, "+--------+", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, "|        |", 1, NDLNGTH * i, NDLNGTH);
+            visContent(w, "|        |", 2, NDLNGTH * i, NDLNGTH);
+            visContent(w, "|        |", 3, NDLNGTH * i, NDLNGTH);
+            visContent(w, "+--------+", 4, NDLNGTH * i, NDLNGTH);
         }
 
         ////////////////////////    NEED ALSO SOME OTHER TYPES - LATERRRRRRRRRRRRRRERERERR
@@ -161,7 +169,7 @@ void Blocks::draw() {
 
 void Blocks::margAdjustBlock(int id) {
     if(NDLNGTH * (id + 1) - state->widthMarg > getmaxx(stdscr) - 2) 
-        state->widthMarg = NDLNGTH * (id + 1) - getmaxx(stdscr) - 2;
+        state->widthMarg = NDLNGTH * (id + 1) - (getmaxx(stdscr) - 2);
     else if(state->widthMarg >= NDLNGTH * id)
         state->widthMarg = NDLNGTH * id;
 }
@@ -171,13 +179,13 @@ void Blocks::margAdjustBlock(int id) {
 
 void SignalVision::refreshLines() {
     for(int i = 0; i < doc->nodes.size(); i++) 
-        mvwvline(w, 0, NDLNGTH * i + NDLNGTH / 2, '|', SIGLNGTH * doc->signals.size());
+        mvwvline(w, 0, NDLNGTH * i + NDLNGTH / 2, '|', SIGLNGTH * (int)doc->signals.size());
 }
 
 SignalVision::SignalVision(Doc* d, DocState* s) {
     doc = d;
     state = s;
-    w = newpad(doc->signals.size() * SIGLNGTH, doc->nodes.size() * NDLNGTH);
+    w = newpad((int)doc->signals.size() * SIGLNGTH, (int)doc->nodes.size() * NDLNGTH);
     draw();
 }
 
@@ -201,7 +209,8 @@ void SignalVision::draw() {
             {
             case SigType::Continue:
                 mvwhline(w, SIGLNGTH * i + 2, source, '=', dest);
-                break;            
+                break;        
+            case SigType::Info:    
             default:
                 mvwhline(w, SIGLNGTH * i + 2, source, '-', dest);
                 break;
@@ -219,6 +228,7 @@ void SignalVision::draw() {
                 case SigType::Continue:
                     mvwhline(w, SIGLNGTH * i + 2, source, '=',dest);
                     break;
+                case SigType::Info:
                 default:
                     mvwhline(w, SIGLNGTH * i + 2, source, '-', dest);
                     break;
@@ -240,8 +250,8 @@ void SignalVision::draw() {
             mvwaddch(w, SIGLNGTH * i + 1, source + dest, '|');
             mvwaddch(w, SIGLNGTH * i + 2, source + dest, '|');
             mvwaddch(w, SIGLNGTH * i + 2, source + dest + 1, '<');
-            mvwaddch(w, SIGLNGTH * i + 1, source + dest * 2 - 1, '*');
-            mvwaddch(w, SIGLNGTH * i + 2, source + dest * 2 - 1, '*');
+            mvwaddch(w, SIGLNGTH * i + 1, source + 2 * dest - 1, '*');
+            mvwaddch(w, SIGLNGTH * i + 2, source + 2 * dest - 1, '*');
 
         }
         if(state->mode == Mode::Signal && i == state->selectedSig) 
@@ -252,7 +262,7 @@ void SignalVision::draw() {
 
 void SignalVision::margAdjustSignal(int id) {
     if(SIGLNGTH * (id + 1) - state->lengthMarg > getmaxy(stdscr) - 10) 
-        state->lengthMarg = SIGLNGTH * (id + 1) - getmaxy(stdscr) - 10;
+        state->lengthMarg = SIGLNGTH * (id + 1) - (getmaxy(stdscr) - 10);
     else if(state->lengthMarg >= SIGLNGTH * id)
         state->lengthMarg = SIGLNGTH * id;
 }

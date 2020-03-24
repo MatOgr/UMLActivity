@@ -5,9 +5,6 @@
 */
 
 #include "Controller.hpp"
-#include <fstream>
-#include <iostream>
-#include "Doc.hpp"
 
 Controller::Controller(Doc* doc, DocState* state) {
     d = doc;
@@ -68,22 +65,22 @@ void Controller::changeNode(unsigned int pos) {
         return;
 
     Node& n = d->nodes[pos];
-    cout << "Choose one of the following types:\n\n";
-    cout << "Initial - i,\n";
-    cout << "Activity - a,\n";
-    cout << "Decision - d,\n";
-    cout << "Guard - g,\n";
-    cout << "Fork - f,\n";
-    cout << "Join - j,\n";
-    cout << "Merge - m,\n";
-    cout << "Time - t,\n";
-    cout << "Final - e\n\n";
+    printf("Choose one of the following types:\n\n");
+    printf("Initial - i,\n");
+    printf("Activity - a,\n");
+    printf("Decision - d,\n");
+    printf("Guard - g,\n");
+    printf("Fork - f,\n");
+    printf("Join - j,\n");
+    printf("Merge - m,\n");
+    printf("Time - t,\n");
+    printf("Final - e\n\n");
 
     char o;
     bool repeat = true;
     while(repeat) {
-        cin >> o;       //  error exception needed
-        switch(o) {
+                       //  error exception needed
+        switch(getchar()) {
         case 'i':
             n.type = NodeType::Initial;
             repeat = false;
@@ -96,6 +93,7 @@ void Controller::changeNode(unsigned int pos) {
             n.type = NodeType::Decision;
             repeat = false;
             break;
+       /*
         case 'g':
             n.type = NodeType::Guard;
             repeat = false;
@@ -116,12 +114,13 @@ void Controller::changeNode(unsigned int pos) {
             n.type = NodeType::Time;
             repeat = false;
             break;
+            */
         case 'e':
             n.type = NodeType::Final;
             repeat = false;
             break;
         default:
-            cout << "There's no such option - type remains as it was before\n";
+            printf("There's no such option - type remains as it was before\n");
             repeat = true;
             break;
         }
@@ -186,8 +185,9 @@ void Controller::openDoc(string fName) {
     }
     json j;
     file >> j;
-    *d << j.get<Doc>();
+    *d = j.get<Doc>();
     file.close();
+    
     s->docName = fName;
     s->lengthMarg = 0;
     s->widthMarg = 0;

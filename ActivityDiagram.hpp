@@ -15,6 +15,7 @@
 #include "Doc.hpp"
 #include "Visual.hpp"
 #include "obiektowe/shared.hpp"
+#include "json.hpp"
 
 using namespace std;
 

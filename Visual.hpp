@@ -8,11 +8,13 @@
 #define Visual_hpp
 
 #include <ncurses.h>
-#include "Doc.hpp"
 #include <stdio.h>
+#include "Doc.hpp"
 
-const int NDLNGTH = 20;
-const int SIGLNGTH = 3;
+using namespace std;
+
+const int NDLNGTH = 21;
+const int SIGLNGTH = 4;
 
 class Vision {
 protected:

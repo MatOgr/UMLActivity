@@ -19,11 +19,11 @@ enum class NodeType {
     Initial, 
     Activity,
     Decision,
-    Guard,
-    Fork,
-    Join,
-    Merge,
-    Time,
+//    Guard,
+//    Fork,
+//    Join,
+//    Merge,
+//    Time,
     Final
 };
 
@@ -50,7 +50,7 @@ struct Signal {
 };
 
 void to_json(json& j, const Signal& s);
-void from_json(json& j, const Signal& s);
+void from_json(const json& j, Signal& s);
 bool operator <(const Signal& x, const Signal& y);
 
 
@@ -67,11 +67,11 @@ struct Doc {
     vector<Signal> signals;
 };
 void to_json(json& j, const Doc& d);
-void from_json(json& j, Doc& d);
+void from_json(const json& j, Doc& d);
 
 struct DocState {
-    string docName;
     Mode mode;
+    string docName;
     unsigned int selectedNode = 0;
     unsigned int selectedSig = 0;
     int widthMarg = 0;

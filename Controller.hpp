@@ -64,6 +64,7 @@ public:
     void end();                 //  finish creating
     void next();                //  save src, continue
     void cancel();              //  resign of creating new signal
+
 };
 
 
