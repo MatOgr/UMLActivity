@@ -94,8 +94,8 @@ public:
     ActivityDiagram();
     void init();          //  DONE
     void redraw();          //  DONE
-    void setEntry(string what, string value);
-    string getEntry(string what);
+    void setEntry(string field, string value);
+    string getEntry(string field);
 
 };
 

@@ -7,14 +7,14 @@
 #include "Visual.hpp"
 
 
-void visContent(WINDOW* w, char* txt, int length, int X, int Y) {
+void visContent(WINDOW* w, const char* txt, int length, int X, int Y) {
     int pad;
     pad = (length - strlen(txt)) / 2;
-    mvwaddnstr(w, Y, X + pad, txt, len);
+    mvwaddnstr(w, Y, X + pad, txt, length);
 }
 
 void makeSpace(WINDOW* w, int X, int Y, int length) {
-    for(int i = 0; i < length, i++) 
+    for(int i = 0; i < length; i++) 
         mvwaddch(w, Y, X + i, ' ');
 }
 
@@ -24,7 +24,7 @@ void makeSpace(WINDOW* w, int X, int Y, int length) {
 
 Border::Border(DocState* s) {
     state = s;
-    w = newwin(getmaxy(stdscr) - 5, getmaxx(stdscr), 1, 0); //  ???
+    w = newwin(getmaxy(stdscr) - 3, getmaxx(stdscr), 1, 0); //  ???
 }
 
 Border::~Border() {
@@ -120,7 +120,7 @@ Blocks::~Blocks() {
 }
 
 void Blocks::draw() {
-    for*int i = 0; i < doc->nodes.size(); i++) {
+    for(int i = 0; i < doc->nodes.size(); i++) {
         if(i == state->selectedNode && (state->mode == Mode::Node || state->mode == Mode::NewSigSrc || state->mode == Mode::NewSigDest))
             wattron(w, A_STANDOUT);
         makeSpace(w, 0, NDLNGTH * i, NDLNGTH);
@@ -161,7 +161,7 @@ void Blocks::draw() {
 
 void Blocks::margAdjustBlock(int id) {
     if(NDLNGTH * (id + 1) - state->widthMarg > getmaxx(stdscr) - 2) 
-        state->widthMarg = NDLNGTH * (id + 1) - getmaxx(stdscr) - 2
+        state->widthMarg = NDLNGTH * (id + 1) - getmaxx(stdscr) - 2;
     else if(state->widthMarg >= NDLNGTH * id)
         state->widthMarg = NDLNGTH * id;
 }
@@ -182,7 +182,7 @@ SignalVision::SignalVision(Doc* d, DocState* s) {
 }
 
 void SignalVision::draw() {
-    wclear();
+    wclear(w);
     refreshLines();
     int source, dest;
     Signal* s;
@@ -234,14 +234,14 @@ void SignalVision::draw() {
             makeSpace(w, SIGLNGTH * i + 2, source, NDLNGTH);
             visContent(w, s->name.c_str(), SIGLNGTH * i, source, NDLNGTH);
 
-            char = (s->type == SigType::Continue) ? '=' : '-';
+            char ch = (s->type == SigType::Continue) ? '=' : '-';
             mvwhline(w, SIGLNGTH * i + 1, source + dest + 1, ch, dest - 2);
             mvwhline(w, SIGLNGTH * i + 2, source + dest + 1, ch, dest - 2);
             mvwaddch(w, SIGLNGTH * i + 1, source + dest, '|');
             mvwaddch(w, SIGLNGTH * i + 2, source + dest, '|');
             mvwaddch(w, SIGLNGTH * i + 2, source + dest + 1, '<');
             mvwaddch(w, SIGLNGTH * i + 1, source + dest * 2 - 1, '*');
-            mvwaddch(w, SIGLNGTH * i + 2, source + dest * 2 - 1, '*')
+            mvwaddch(w, SIGLNGTH * i + 2, source + dest * 2 - 1, '*');
 
         }
         if(state->mode == Mode::Signal && i == state->selectedSig) 
@@ -252,7 +252,7 @@ void SignalVision::draw() {
 
 void SignalVision::margAdjustSignal(int id) {
     if(SIGLNGTH * (id + 1) - state->lengthMarg > getmaxy(stdscr) - 10) 
-        state->lengthMarg = SIGLNGTH * (id + 1) - getmaxy(stdscr) - 10
+        state->lengthMarg = SIGLNGTH * (id + 1) - getmaxy(stdscr) - 10;
     else if(state->lengthMarg >= SIGLNGTH * id)
         state->lengthMarg = SIGLNGTH * id;
 }

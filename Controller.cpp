@@ -6,6 +6,7 @@
 
 #include "Controller.hpp"
 #include <fstream>
+#include <iostream>
 #include "Doc.hpp"
 
 Controller::Controller(Doc* doc, DocState* state) {
@@ -13,26 +14,26 @@ Controller::Controller(Doc* doc, DocState* state) {
     s = state;
 }
 
-void Controller::addNode(int pos, NodeType type, string name) {
+void Controller::addNode(unsigned int pos, NodeType type, string name) {
     for(auto& s : d->signals) {
-        if (s.source >= pos) ++s.source;
-        if (s.destination >= pos) ++s.destination;
+        if (s.source >= pos) s.source++;
+        if (s.destination >= pos) s.destination++;
     }
     s->hasChanged = true;
     d->nodes.emplace(d->nodes.begin() + pos, Node {type, name});
 }
 
-void Controller::removeNode(int pos) {
-    
-    for(auto& i : d->signals) {
-        if(i->source == pos || i->destination == pos)
+void Controller::removeNode(unsigned int pos) {
+    auto i = d->signals.begin();
+    while(i != d->signals.end()) {
+        if(i->source == pos || i->destination == pos) {
             i = d->signals.erase(i);
-            break;      // HMM??
-        else {
+        } else {
             if(i->source > pos) 
                 i->source--;
             if(i->destination > pos)
                 i->destination--;
+            i++;
         }
     }
 
@@ -47,37 +48,37 @@ void Controller::renameNode(string name) {
     s->hasChanged = true;
 }
 
-bool Controller::moveNode(int start, int dest) {
+bool Controller::moveNode(unsigned int start, unsigned int dest) {
     
     if(dest < 0 || dest >= d->nodes.size()) 
         return false;
 
     swap(d->nodes[start], d->nodes[dest]);
     for(auto& i : d->signals) {
-        i.source = (i.source == start) ? dest : (i.source == dest) ? start : ;
-        i.source = (i.destination == start) ? dest : (i.source == dest) ? start : ;
+        i.source = (i.source == start) ? dest : (i.source == dest) ? start : i.source;
+        i.destination = (i.destination == start) ? dest : (i.destination == dest) ? start : i.destination;
     }
     s->hasChanged = true;
 
     return true;
 }
 
-void Controller::changeNode(int pos) {
+void Controller::changeNode(unsigned int pos) {
     if(d->nodes.empty()) 
         return;
 
     Node& n = d->nodes[pos];
-    cout << "Actual type is: " << n.type << endl;
-    cout << "Choose one of the following types:\n\n
-             Initial - i,
-             Activity - a,
-             Decision - d,
-             Guard - g,
-             Fork - f,
-             Join - j,
-             Merge - m,
-             Time - t,
-             Final - e\n\n";
+    cout << "Choose one of the following types:\n\n";
+    cout << "Initial - i,\n";
+    cout << "Activity - a,\n";
+    cout << "Decision - d,\n";
+    cout << "Guard - g,\n";
+    cout << "Fork - f,\n";
+    cout << "Join - j,\n";
+    cout << "Merge - m,\n";
+    cout << "Time - t,\n";
+    cout << "Final - e\n\n";
+
     char o;
     bool repeat = true;
     while(repeat) {
@@ -130,12 +131,12 @@ void Controller::changeNode(int pos) {
 
 
 
-void Controller::addSignal(int pos, int src, int dest, SigType type, string name) {
+void Controller::addSignal(unsigned int pos, unsigned int src, unsigned int dest, SigType type, string name) {
     d->signals.emplace(d->signals.begin() + pos, Signal {type, name, src, dest});
     s->hasChanged = true;
 }
 
-void Controller::removeSignal(int pos) {
+void Controller::removeSignal(unsigned int pos) {
     d->signals.erase(d->signals.begin() + pos);
     s->hasChanged = true;
 }
@@ -147,7 +148,7 @@ void Controller::renameSignal(string name) {
     s->hasChanged = true;
 }
  
-bool Controller::moveSignal(int start, int dest) {
+bool Controller::moveSignal(unsigned int start, unsigned int dest) {
     if(dest >= d->signals.size() || dest < 0) 
         return false;
     
@@ -156,12 +157,12 @@ bool Controller::moveSignal(int start, int dest) {
     return true;
 }
 
-void Controller::changeSignal(int pos) {
+void Controller::changeSignal(unsigned int pos) {
     if(d->signals.empty()) 
-        return false;
+        return;
 
     Signal& i = d->signals[pos];
-    i.type = (i.type == SigType::Change) ? SigType::Info : SigType::Change;
+    i.type = (i.type == SigType::Continue) ? SigType::Info : SigType::Continue;
     s->hasChanged = true;
 }
 
@@ -179,12 +180,14 @@ void Controller::newDoc() {
 }
 
 void Controller::openDoc(string fName) {
-    ifstream fp(fName);
-    if(fp.fail())   throw cout << "Error opening\n";
+    ifstream file(fName);
+    if(file.fail()) {
+        throw FError::OpenErr;
+    }
     json j;
-    fp >> j;
-    *d = j.get<Doc>();
-    fp.close();
+    file >> j;
+    *d << j.get<Doc>();
+    file.close();
     s->docName = fName;
     s->lengthMarg = 0;
     s->widthMarg = 0;
@@ -195,10 +198,11 @@ void Controller::openDoc(string fName) {
 }
 
 void Controller::saveDoc(string fName) {
-    ofstream fp(fName);
-    if(fp.fail())   throw cout << "Error saving\n\n";
-    fp << json(*d).dump(4) << endl;
-    fp.close();
+    ofstream file(fName);
+    if(file.fail())   
+        throw FError::CloseErr;
+    file << json(*d).dump(4) << endl;
+    file.close();
     s->docName = fName;
     s->hasChanged = false;
 }
@@ -212,13 +216,13 @@ void SigCreator::SigCreator(Controller* cont, Doc* doc, DocState* state) {
     s = state;
 }
 
-void SigCreator::begin(int pos) {
+void SigCreator::begin(unsigned int pos) {
     if(s->mode != Mode::Signal || d->nodes.empty()) 
         return;
     sigPos = pos;
     s->mode = Mode::NewSigSrc;
     crSlctdNode = s->selectedNode;
-    crSlctdSig = s->selectedSig
+    crSlctdSig = s->selectedSig;
     s->crSlctdNode = (d->signals.size() > 0) ? min(d->signals[s->selectedSig].source, d->signals[s->selectedSignal].destination) : 0;
 }
 
@@ -231,7 +235,7 @@ void SigCreator::end() {
 
 void SigCreator::next() {
     s->mode = Mode::NewSigDest;
-    siSrc = s->selectedNode;
+    sigSrc = s->selectedNode;
 }
 
 void SigCreator::cancel() {

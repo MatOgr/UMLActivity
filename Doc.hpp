@@ -16,11 +16,6 @@ using namespace std;
 
 
 //  Node structure
-struct Node {
-    string name;
-    NodeType type;
-};
-
 enum class NodeType {
     Initial, 
     Activity,
@@ -33,21 +28,26 @@ enum class NodeType {
     Final
 };
 
+struct Node {
+    string name;
+    NodeType type;
+};
+
 void toJson(json& j, const Node& n);
 void fromJson(const json& j, Node& n);
 bool operator <(const Node& x, const Node& y);
 
 //  Signal structure 
+enum class SigType {
+    Continue,
+    Info
+};
+
 struct Signal {
     SigType type;
     string name;
     int source;
     int destination;
-};
-
-enum class SigType {
-    Continue,
-    Info
 };
 
 void toJson(json& j, const Signal& s);
@@ -93,7 +93,7 @@ const Doc EXAMPLE {
         {NodeType::Final, "Dead"}                           // 7
     },
     {
-        {SigType::Info, "Is the number odd?" 0, 1},
+        {SigType::Info, "Is the number odd?", 0, 1},
         {SigType::Info, "YES", 1, 2},
         {SigType::Continue, "", 2, 3},
         {SigType::Continue, "", 3, 6},

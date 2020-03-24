@@ -8,7 +8,8 @@
 
 
 //////////////////////////////      Mode manip
-void ActivityDiagram::nodeMode() {
+
+void ActivityDiagram::figureMode() {
     state.mode = Mode::Node;
     draw();
 }
@@ -27,7 +28,7 @@ void ActivityDiagram::trimDown() {
 }
 
 void ActivityDiagram::trimRight() {
-    if(state.widthMarg < doc.nodes.size() * NDLNGTH - getmaxx(stdscr) + 2))
+    if(state.widthMarg < doc.nodes.size() * NDLNGTH - getmaxx(stdscr) + 2)
         state.widthMarg++;
     draw(false);
 }
@@ -100,7 +101,7 @@ void ActivityDiagram::draw(bool adjusting) {
     if(adjusting) {
         switch (state.mode)
         {
-        case Mode::Actors:
+        case Mode::Node:
         case Mode::NewSigSrc:
         case Mode::NewSigDest:
             nodeView->margAdjustBlock(state.selectedNode);
@@ -146,7 +147,7 @@ void ActivityDiagram::bindSig() {
 void ActivityDiagram::bindFigure() {
     infoView->clearInfo();
     if(state.mode == Mode::Signal)
-        nodeMode();
+        figureMode();
 }
 
 void ActivityDiagram::bindNew() {
@@ -186,7 +187,7 @@ void ActivityDiagram::bindSaveAs() {
             control->saveDoc(state.docName);
             infoView->setInfo("File \"" + state.docName + "\" has been saved");
         } else {
-            control->save(entries["FILENAME"]);
+            control->saveDoc(entries["FILENAME"]);
             infoView->setInfo("File \"" + entries["FILENAME"] + "\" has been saved");
         }
         draw();
@@ -305,14 +306,14 @@ void ActivityDiagram::bindingSetup() {
 
     // Change type  -   CTRL + T
     backend->bind("#nano#<CTRL>t%Toggle", [&]() { bindChangeType(); }, "Change Node/Signal type");
-    backend->("#nice#.Edit.Toggle type", [&]() { bindChangeType(); }, "Change Node/Signal type");
+    backend->bind("#nice#.Edit.Toggle type", [&]() { bindChangeType(); }, "Change Node/Signal type");
 
     //  Rename  -   CTRL + R
     backend->bind("#nano#<CTRL>r%Rename!New name${RENAME}", [this]() { bindRename(); }, "Rename Node/Signal");
     backend->bind("#nice#.Edit.Rename${New name: |RENAME}", [this]() { bindRename(); }, "Rename Node/Signal");
 
     //  Delete  -   CTRL X
-    backend->bind("#nano#<CTRL>x%Delete", [thiss]() { bindDelete(); }, "Delete Node/Signal");
+    backend->bind("#nano#<CTRL>x%Delete", [this]() { bindDelete(); }, "Delete Node/Signal");
     backend->bind("#nice#.Edit.Delete", [this]() { bindDelete(); }, "Delete Node/Signal");
 
     //  Signal Mode -   CTRL + L
@@ -414,7 +415,7 @@ void ActivityDiagram::keyHandler() {
         case Mode::NewSigDest:
             create->end();
             resetTerminal();
-            drwa();
+            draw();
             break;
         
         default:
@@ -433,11 +434,11 @@ void ActivityDiagram::keyHandler() {
 
 
 /////////////////////////////       Public things
-void ActivityDiagram::ActivityDiagram() {
+ActivityDiagram::ActivityDiagram() {
     doc = EXAMPLE;
-    state = {Mode::Node, "example.json"};
+    state = {"example.json", Mode::Node};
     control = new Controller(&doc, &state);
-    create = new SigCreator(&doc, &state, control);
+    create = new SigCreator(control, &doc, &state);
 
     borderView = new Border(&state);
     nodeView = new Blocks(&doc, &state);
@@ -456,15 +457,15 @@ void ActivityDiagram::redraw() {
     draw(false);
 }
 
-void ActivityDiagram::setEntry(string what, string value) {
-    entries[what] = value;
+void ActivityDiagram::setEntry(string field, string value) {
+    entries[field] = value;
 }
 
-void ActivityDiagram::getEntry(string what) {
+string ActivityDiagram::getEntry(string field) {
     if(field == "IS_SAVED") 
         return state.hasChanged ? "NO" : "YES";
     else 
-        return entries[what];
+        return entries[field];
 }
 
 //N
