@@ -1,0 +1,6 @@
+To compile code and create program use this comands:
+-> make init      //  to get backends
+-> make           //  to compile
+
+To run the program use:
+-> ./ActUML i     //  with Nice
