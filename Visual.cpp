@@ -34,11 +34,11 @@ Border::~Border() {
 void Border::draw() {
     wclear(w);
     box(w, 0, 0);
-    mvwhline(w, 6, 1, '=', getmaxx(w) - 2); //  ???
+    mvwhline(w, 6, 1, '_', getmaxx(w) - 2); //  ???
     string windowName = state->docName;
     if(state->hasChanged) 
         windowName += "*";
-    visContent(w, windowName.c_str(), getmaxx(stdscr) - 2, 0, 0);   //  ???          //  ???
+    visContent(w, windowName.c_str(), getmaxx(stdscr) - 4, 0, 0);   //  ???          //  ???
     wrefresh(w);
 }
 
@@ -121,9 +121,21 @@ Blocks::~Blocks() {
     delwin(w);
 }
 
+void Blocks::margAdjustBlock(int id) {
+    if(NDLNGTH * (id + 1) - state->widthMarg > getmaxx(stdscr) - 2) {
+        state->widthMarg = NDLNGTH * (id + 1) - (getmaxx(stdscr) - 2);
+    }
+        
+    else if(state->widthMarg >= NDLNGTH * id)
+        state->widthMarg = NDLNGTH * id;
+}
+
+
 void Blocks::draw() {
     for(int i = 0; i < doc->nodes.size(); i++) {
-        if(i == state->selectedNode && (state->mode == Mode::Node || state->mode == Mode::NewSigSrc || state->mode == Mode::NewSigDest))
+        if(i == state->selectedNode && 
+        (state->mode == Mode::Node || state->mode == Mode::NewSigSrc ||
+         state->mode == Mode::NewSigDest))
             wattron(w, A_STANDOUT);
         makeSpace(w, 0, NDLNGTH * i, NDLNGTH);
         makeSpace(w, 1, NDLNGTH * i, NDLNGTH);
@@ -132,54 +144,54 @@ void Blocks::draw() {
         makeSpace(w, 4, NDLNGTH * i, NDLNGTH);
 
         if(doc->nodes[i].type == NodeType::Initial) {
-            visContent(w, "  -----", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, "  _____", 0, NDLNGTH * i, NDLNGTH);
             visContent(w, " /     \\", 1, NDLNGTH * i, NDLNGTH);
             visContent(w, "|       |", 2, NDLNGTH * i, NDLNGTH);
-            visContent(w, " \\    /", 3, NDLNGTH * i, NDLNGTH);
-            visContent(w, "  -----", 4, NDLNGTH * i, NDLNGTH);
+            //visContent(w, " \\_____/", 3, NDLNGTH * i, NDLNGTH);
         } else if(doc->nodes[i].type == NodeType::Final) {
-            visContent(w, "  -----", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, "  _____", 0, NDLNGTH * i, NDLNGTH);
             visContent(w, " /@@@@@\\", 1, NDLNGTH * i, NDLNGTH);
             visContent(w, "|@@@@@@@|", 2, NDLNGTH * i, NDLNGTH);
-            visContent(w, " \\@@@@@/", 3, NDLNGTH * i, NDLNGTH);
-            visContent(w, "  -----", 4, NDLNGTH * i, NDLNGTH);
+           // visContent(w, " \\__@__/", 3, NDLNGTH * i, NDLNGTH);
         } else if (doc->nodes[i].type == NodeType::Decision) {
             visContent(w, " /\\", 0, NDLNGTH * i, NDLNGTH);
             visContent(w, "/  \\", 1, NDLNGTH * i, NDLNGTH);
             visContent(w, "\\  /", 2, NDLNGTH * i, NDLNGTH);
-            visContent(w, " \\/", 3, NDLNGTH * i, NDLNGTH);
-            visContent(w, "  ", 4, NDLNGTH * i, NDLNGTH);
+           // visContent(w, " \\/", 3, NDLNGTH * i, NDLNGTH);
         } else if(doc->nodes[i].type == NodeType::Activity) {
-            visContent(w, "+--------+", 0, NDLNGTH * i, NDLNGTH);
-            visContent(w, "|        |", 1, NDLNGTH * i, NDLNGTH);
-            visContent(w, "|        |", 2, NDLNGTH * i, NDLNGTH);
-            visContent(w, "|        |", 3, NDLNGTH * i, NDLNGTH);
-            visContent(w, "+--------+", 4, NDLNGTH * i, NDLNGTH);
-        }
+            visContent(w, "+------+", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, "|      |", 1, NDLNGTH * i, NDLNGTH);
+            visContent(w, "|      |", 2, NDLNGTH * i, NDLNGTH);
+            //visContent(w, "+------+", 3, NDLNGTH * i, NDLNGTH);
+        } else if(doc->nodes[i].type == NodeType::Fork) {
+            visContent(w, "   \\/  ", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, "========", 1, NDLNGTH * i, NDLNGTH);
+            visContent(w, " |    |", 2, NDLNGTH * i, NDLNGTH);
+           // visContent(w, " V    V", 3, NDLNGTH * i, NDLNGTH);
+        } else if(doc->nodes[i].type == NodeType::Join) {
+            visContent(w, " V    V", 0, NDLNGTH * i, NDLNGTH);
+            visContent(w, "========", 1, NDLNGTH * i, NDLNGTH);
+            visContent(w, "    |   ", 2, NDLNGTH * i, NDLNGTH);
+           // visContent(w, "    V   ", 3, NDLNGTH * i, NDLNGTH);
+        } 
 
         ////////////////////////    NEED ALSO SOME OTHER TYPES - LATERRRRRRRRRRRRRRERERERR
 
         visContent(w, doc->nodes[i].name.c_str(), 4, NDLNGTH * i, NDLNGTH);
         if(i == state->selectedNode && (state->mode == Mode::Node || state->mode == Mode::NewSigSrc || state->mode == Mode::NewSigDest))
-            wattron(w, A_STANDOUT);    
+            wattroff(w, A_STANDOUT);    
     }
     prefresh(w, 0, state->widthMarg, 2, 1, 6, getmaxx(stdscr) - 2);
 
 }
 
-void Blocks::margAdjustBlock(int id) {
-    if(NDLNGTH * (id + 1) - state->widthMarg > getmaxx(stdscr) - 2) 
-        state->widthMarg = NDLNGTH * (id + 1) - (getmaxx(stdscr) - 2);
-    else if(state->widthMarg >= NDLNGTH * id)
-        state->widthMarg = NDLNGTH * id;
-}
 
 
 /////////////////////////           Signals
 
 void SignalVision::refreshLines() {
     for(int i = 0; i < doc->nodes.size(); i++) 
-        mvwvline(w, 0, NDLNGTH * i + NDLNGTH / 2, '|', SIGLNGTH * (int)doc->signals.size());
+        mvwvline(w, 0, NDLNGTH * i + (NDLNGTH / 2), '|', SIGLNGTH * doc->signals.size());
 }
 
 SignalVision::SignalVision(Doc* d, DocState* s) {
@@ -190,10 +202,11 @@ SignalVision::SignalVision(Doc* d, DocState* s) {
 }
 
 void SignalVision::draw() {
-    wclear(w);
-    refreshLines();
     int source, dest;
     Signal* s;
+    wclear(w);
+    refreshLines();
+    
 
     for(int i = 0; i < doc->signals.size(); i++) {
         s = &doc->signals[i];
@@ -247,9 +260,12 @@ void SignalVision::draw() {
             char ch = (s->type == SigType::Continue) ? '=' : '-';
             mvwhline(w, SIGLNGTH * i + 1, source + dest + 1, ch, dest - 2);
             mvwhline(w, SIGLNGTH * i + 2, source + dest + 1, ch, dest - 2);
+
             mvwaddch(w, SIGLNGTH * i + 1, source + dest, '|');
             mvwaddch(w, SIGLNGTH * i + 2, source + dest, '|');
+            
             mvwaddch(w, SIGLNGTH * i + 2, source + dest + 1, '<');
+            
             mvwaddch(w, SIGLNGTH * i + 1, source + 2 * dest - 1, '*');
             mvwaddch(w, SIGLNGTH * i + 2, source + 2 * dest - 1, '*');
 
@@ -257,7 +273,7 @@ void SignalVision::draw() {
         if(state->mode == Mode::Signal && i == state->selectedSig) 
             wattroff(w, A_STANDOUT);
     }
-    prefresh(w, state->lengthMarg, state->widthMarg, 8, 1, getmaxy(stdscr) - 4, getmaxx(stdscr) - 2);
+    prefresh(w, 0 + state->lengthMarg, 0 + state->widthMarg, 8, 1, getmaxy(stdscr) - 4, getmaxx(stdscr) - 2);
 }
 
 void SignalVision::margAdjustSignal(int id) {

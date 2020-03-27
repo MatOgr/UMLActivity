@@ -17,7 +17,7 @@ void Controller::addNode(unsigned int pos, NodeType type, string name) {
         if (s.destination >= pos) s.destination++;
     }
     s->hasChanged = true;
-    d->nodes.emplace(d->nodes.begin() + pos, Node {name, type});
+    d->nodes.emplace(d->nodes.begin() + pos, Node {type, name});
 }
 
 void Controller::removeNode(unsigned int pos) {
@@ -187,7 +187,7 @@ void Controller::openDoc(string fName) {
     file >> j;
     *d = j.get<Doc>();
     file.close();
-    
+
     s->docName = fName;
     s->lengthMarg = 0;
     s->widthMarg = 0;

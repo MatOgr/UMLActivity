@@ -31,7 +31,7 @@ public:
     ~Border();
 
     void draw();
-};
+};  
 
 class InfoBar : public Vision {
 private:
@@ -71,7 +71,7 @@ private:
     
 public:
     SignalVision(Doc* d, DocState* s);
-    ~SignalVision();
+    //~SignalVision();
 
     void draw();
     void margAdjustSignal(int id);

@@ -15,8 +15,8 @@ int main(int argc, char* argv[]) {
 
     if (argc < 2) {
         cout << "Choose backend type:\n\n";
-        cout << argv[0] << "\to - Nano\n";
-        cout << argv[0] << "\te - Nice\n";
+        cout << argv[0] << "\ta - Nano\n";
+        cout << argv[0] << "\ti - Nice\n";
         //cout << argv[0] << "\tm - Mcedit\n";
         //cout << argv[0] << "\tv - Vim\n";
         return 0;
@@ -25,10 +25,10 @@ int main(int argc, char* argv[]) {
     Backend* b;
 
     switch (argv[1][0]) {
-        case 'o':
+        case 'a':
             //b = new Nano;
             break;
-        case 'e':
+        case 'i':
             b = new nice();
             break;
         case 'm':

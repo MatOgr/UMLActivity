@@ -49,10 +49,10 @@ void ActivityDiagram::trimLeft() {
 
 //////////////////////////////      Signals changing
 void ActivityDiagram::nextSig() {
-    if(doc.signals.size() > 0) {
-        state.selectedSig = (state.selectedSig + 1) % doc.signals.size();
-        draw();
-    }
+    if(doc.signals.size() == 0)
+        return;
+    state.selectedSig = (state.selectedSig + 1) % doc.signals.size();
+    draw();
 }
 
 void ActivityDiagram::prevSig() {
@@ -60,7 +60,7 @@ void ActivityDiagram::prevSig() {
         return;
     
     if(state.selectedSig == 0) 
-        state.selectedSig = doc.signals.size() - 1;
+        state.selectedSig = (unsigned int)doc.signals.size() - 1;
     else 
         state.selectedSig--;
     draw();
@@ -70,10 +70,10 @@ void ActivityDiagram::prevSig() {
 
 //////////////////////////////      Nodes changing
 void ActivityDiagram::nextFigure() {
-    if(doc.nodes.size() > 0) {
-        state.selectedNode = (state.selectedNode + 1) % doc.nodes.size();
-        draw();
-    }
+    if(doc.nodes.size() == 0) 
+        return;
+    state.selectedNode = (state.selectedNode + 1) % doc.nodes.size();
+    draw();
 }
 
 void ActivityDiagram::prevFigure() {
@@ -81,7 +81,7 @@ void ActivityDiagram::prevFigure() {
         return;
     
     if(state.selectedNode == 0) 
-        state.selectedNode = doc.nodes.size() - 1;
+        state.selectedNode = (unsigned int)doc.nodes.size() - 1;
     else 
         state.selectedNode--;
     draw();
@@ -208,6 +208,7 @@ void ActivityDiagram::bindRename() {
         draw();
     } else if(state.mode == Mode::Node) {
         control->renameNode(entries["RENAME"]);
+        draw();
         draw();
     }
 }

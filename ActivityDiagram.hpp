@@ -21,7 +21,7 @@ using namespace std;
 
 class ActivityDiagram : public Tool {
 
-public:
+private:
     
     //  Storage
     map<string, string> entries;
@@ -78,10 +78,6 @@ public:
     //  Nav binding
     void bindMoveD();          //  DONE
     void bindMoveU();          //  DONE
-   // void bindUp();
-   // void bindDown();
-   // void bindLeft();
-   // void bindRight();
 
     //  Key handler
     void keyHandler();          //  DONE 
@@ -90,9 +86,10 @@ public:
     //  General
     void bindingSetup();
 
-//public:
+public:
 
     ActivityDiagram();
+    //~ActivityDiagram();
     void init();          //  DONE
     void redraw();          //  DONE
     void setEntry(string field, string value);

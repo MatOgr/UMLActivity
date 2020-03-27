@@ -12,3 +12,6 @@ prepare:
 	# nano
 	rm -f backend-nano/main.cpp
 	rm -f backend-nano/main
+	#nice 
+	rm -f backend-nice/main.cpp
+	rm -f backend-nice/main
