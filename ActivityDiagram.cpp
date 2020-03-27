@@ -410,7 +410,7 @@ void ActivityDiagram::keyHandler() {
 
     ////////////////  Sig creator
     //  Next
-    else if(k == "n") {
+    else if(k == "y") {
         switch (state.mode)
         {
         case Mode::NewSigSrc:
